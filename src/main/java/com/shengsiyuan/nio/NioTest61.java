@@ -1,16 +1,25 @@
 package com.shengsiyuan.nio;
 
 
-
-
-
+import java.nio.ByteBuffer;
 
 public class NioTest61 {
     public static void main(String[] args) {
-        // 既然数据编译是为了传输okvrn，那么是不是对所有的应用都需要进行数据编码，这一步，其实不是，常见的数据xyydc，并且演示了一种实现方式
+
+        ByteBuffer buffer = ByteBuffer.allocate(10);
+        for(int i =  0 ;i < buffer.capacity();++i){
+            buffer.put((byte)i);
+        }
 
 
-
+        buffer.position(2);
+        buffer.limit(6);
+        ByteBuffer sliceBuffer = buffer.slice();
+        for(int i =  0 ;i < sliceBuffer.capacity(); ++i){
+            byte b = sliceBuffer.get(i);
+            b *=2;
+            sliceBuffer.put(i , b);
+        }
     }
 }
 
