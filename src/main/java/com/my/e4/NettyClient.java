@@ -1,8 +1,7 @@
-package com.my.e3;
+package com.my.e4;
 
 import com.alibaba.fastjson.JSONObject;
 import com.my.e2.RequestFuture;
-import com.my.e2.Response;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.ChannelFuture;
@@ -15,8 +14,6 @@ import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
-import io.netty.util.concurrent.DefaultPromise;
-import io.netty.util.concurrent.Promise;
 
 import java.nio.charset.Charset;
 
@@ -24,6 +21,7 @@ public class NettyClient {
 
     public static EventLoopGroup group = null;
     public static Bootstrap bootstrap = null;
+    public static ChannelFuture future = null;
 
     static {
         // 客户端启动辅助类
@@ -35,15 +33,12 @@ public class NettyClient {
         bootstrap.group(group);
         // 设置内存配置器
         bootstrap.option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
-    }
 
-    public static void main(String[] args) throws Exception {
-        // 新建一个promise对象
-        Promise<Response> promise = new DefaultPromise<>(group.next());
+
         // 业务 Handler
         final ClientHandler handler = new ClientHandler();
         // 把promise对象赋值给handler , 用于获取返回服务器响应结果
-        handler.setPromise(promise);
+        // handler.setPromise(promise);
         // 把handler 对象加入到管道中
         bootstrap.handler(new ChannelInitializer<NioSocketChannel>() {
             @Override
@@ -58,24 +53,44 @@ public class NettyClient {
                 ch.pipeline().addLast(new StringEncoder(Charset.forName("utf-8")));
             }
         });
-        // 连接服务器
-        ChannelFuture future = bootstrap.connect("127.0.0.1", 8080).sync();
+        try {
+            // 连接服务器
+            future = bootstrap.connect("127.0.0.1", 8080).sync();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public Object sendRequest(Object msg) {
+        // 新建一个promise对象
+        //Promise<Response> promise = new DefaultPromise<>(group.next());
+
         // 构建request请求
         RequestFuture request = new RequestFuture();
         // 设置请求id,此处请求id可以设置为自动自增模式
         // 可以采用AtomicLong类的incrementAndGet()方法
-        request.setId(1l);
+       // request.setId(1l);
         // 请求消息内容，此处的内容可以是任意的java对象
-        request.setRequest("hello world !");
+        request.setRequest(msg);
         // 转换成JSON格式发送给编译器StringEncode
         // StringEncode 编码器再发送给LengthFieldPrepender长度编码器， 最终定到TCP缓存中，并传送给客户端
         String requestStr = JSONObject.toJSONString(request);
         future.channel().writeAndFlush(requestStr);
+        Object result = request.get();
+        return result;
         // 同步阻塞等待响应结果
-        Response response = promise.get();
-        System.out.println("==========================");
+        //Response response = promise.get();
         // 打印最终的的结果
-        System.out.println(JSONObject.toJSONString(response));
+        //System.out.println(JSONObject.toJSONString(response));
+    }
+
+    public static void main(String[] args) throws Exception {
+        NettyClient client = new NettyClient();
+        for (int i = 0; i < 100; i++) {
+            Object result = client.sendRequest("hello");
+            System.out.println(result);
+        }
 
     }
 }

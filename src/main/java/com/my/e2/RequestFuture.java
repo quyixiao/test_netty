@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 
 @Data
@@ -18,6 +19,15 @@ public class RequestFuture {
     private volatile Object result;
     // 超时时间默认为5s
     private long timeout = 1000;
+
+    private static final AtomicLong aid = new AtomicLong(1);
+
+    public RequestFuture() {
+        // 当前值新增加1，并将结果返回给id
+        this.id = aid.incrementAndGet();
+        // 在构建请求时，需要把请求加入到缓存中
+        addFuture(this);
+    }
 
     // 将请求放入到缓存中
     public static void addFuture(RequestFuture future) {

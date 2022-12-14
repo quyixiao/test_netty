@@ -32,7 +32,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.16</version>
+            <version>1.16.10</version>
         </dependency>
 
         <dependency>
@@ -63,48 +63,15 @@
 
 
 
-        <!--=======================================================-->
-
 
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
-            <version>3.3.1</version>
+            <version>3.6.1</version>
         </dependency>
 
+        <!--=======================================================-->
 
-
-        <dependency>
-            <groupId>com.google.protobuf</groupId>
-            <artifactId>protobuf-java-util</artifactId>
-            <version>3.3.1</version>
-        </dependency>
-
-
-        <dependency>
-            <groupId>org.apache.thrift</groupId>
-            <artifactId>libthrift</artifactId>
-            <version>0.10.0</version>
-        </dependency>
-
-
-
-        <dependency>
-            <groupId>io.grpc</groupId>
-            <artifactId>grpc-netty</artifactId>
-            <version>1.4.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.grpc</groupId>
-            <artifactId>grpc-protobuf</artifactId>
-            <version>1.4.0</version>
-        </dependency>
-        <dependency>
-            <groupId>io.grpc</groupId>
-            <artifactId>grpc-stub</artifactId>
-            <version>1.4.0</version>
-        </dependency>
 
 
         <!-- protostuff依赖包 end -->

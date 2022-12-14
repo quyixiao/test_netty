@@ -30,9 +30,13 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
         response.setId(id);
         response.setResult("服务器响应ok");
         // 把响应结果返回给客户端
-        ctx.channel().writeAndFlush(JSONObject.toJSONString(response));
+        String xxx = JSONObject.toJSONString(response);
+        ctx.channel().writeAndFlush(xxx);
         
     }
 
 
+    // Netty 客户端线程模型比服务端线程模型简单一些， 它只需要一个线程组，底层采用了Java 的 NIO , 通过IP 和商品连接目标服务器， 请求发送和
+    // 如果没有参数据流进行一些额外的加工处理， 那么将无法区分每次请求的数据包， 编码是指在传输数据前， 对数据包进行加工处理，解码发生在读取数据包时
+    //
 }

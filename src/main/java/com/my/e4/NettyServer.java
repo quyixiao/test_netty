@@ -1,4 +1,4 @@
-package com.my.e3;
+package com.my.e4;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -62,7 +62,6 @@ public class NettyServer {
                             // 把字符串消息转换成ByteBuf
                             ch.pipeline().addLast(new StringEncoder());
                             // 注意解码器和编码器的顺序
-
                             // 两者的执行顺序正好相反 ，解码器执行顺序从上往下，编译器执行顺序从下往上
 
                         }

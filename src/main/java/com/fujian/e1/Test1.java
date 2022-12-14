@@ -1,36 +1,37 @@
-package com.my.e3;
+package com.fujian.e1;
 
+import com.my.e1.ServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.oio.OioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.channel.socket.oio.OioServerSocketChannel;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.codec.string.StringDecoder;
-import io.netty.handler.codec.string.StringEncoder;
 
-public class NettyServer {
+public class Test1 {
 
 
     public static void main(String[] args) {
-        /**
-         * 创建两个线程组， Boss 线程级启动一条线程，监听 OP_ACCEPT事件
-         *  WORKer 线程组默认启动核数 *2 的线程  *
-         *  监听客户端连接的OP_READ 和 OP_WRITE事件，处理I/O事件
-         * */
-        EventLoopGroup bossGroup = new NioEventLoopGroup(1);
-        EventLoopGroup workerGroup = new NioEventLoopGroup();
+
+        // 水平触发，当被监控的文件描述符上有可能读写事件时，通知用户去读写，如果用户一次没有读写完数据，就一直通知用户，在用户确实不怎么关心这个文件描述符情况
+        // 下，频繁通知用户会导致用户真正关心的那些文件描述符的处理效率降低 。
+        // 边缘触发，当被监控的文件描述符上有可读写事件时，通知用户去读写，但只通知一次，这就需要用户一次性的把数据读取完，如果用户没有一次性
+        // 的读写完数据，那就需要等待下一次新数据到来，才能读写上次未读写完的数据 。
+        //
+        OioEventLoopGroup eventLoopGroup = new OioEventLoopGroup();
+
         try {
-            // ServerBootstrap 为Netty服务启动辅助类
             ServerBootstrap serverBootstrap = new ServerBootstrap();
-            serverBootstrap.group(bossGroup, workerGroup);
-            // 设置 TCP Socket 通道为NioServerSocketChannel
-            // 如果是UDP通信 ， 则将其设置为DategramChannel
-            serverBootstrap.channel(NioServerSocketChannel.class);
+            // 什么时候会创建 OioServerSocketChannel 呢？当服务器启动时，就会通过AbstractBootStrap#initAndRegister方法来创建
+            // OioServerSocketChannel
+            serverBootstrap.channel(OioServerSocketChannel.class);
+            serverBootstrap.group(eventLoopGroup);
             // 设置一些TCP 参数
             serverBootstrap.option(ChannelOption.SO_BACKLOG, 128)
                     // 当有客户端链路注册读写事件时，初始化Handler
@@ -60,26 +61,22 @@ public class NettyServer {
                             // 第二个参数的长度值的调节，表明是否包含长度值本身
                             ch.pipeline().addLast(new LengthFieldPrepender(4,false));
                             // 把字符串消息转换成ByteBuf
-                            ch.pipeline().addLast(new StringEncoder());
                             // 注意解码器和编码器的顺序
-
                             // 两者的执行顺序正好相反 ，解码器执行顺序从上往下，编译器执行顺序从下往上
 
                         }
                     });
             // 同步绑定端口
-            ChannelFuture future = serverBootstrap.bind(8080).sync();
+            ChannelFuture future = serverBootstrap.bind(8080);
             // 阻塞主线程，直到Socket 通道被关闭
-            future.channel().closeFuture().sync();
+            future.channel().closeFuture();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            // 最终关闭线程姐
-            workerGroup.shutdownGracefully();
-            bossGroup.shutdownGracefully();
+        }finally {
+            eventLoopGroup.shutdownGracefully();
+
         }
 
 
     }
-
 }
