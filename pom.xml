@@ -107,6 +107,23 @@
             <version>${guava.version}</version>
         </dependency>
 
+
+
+
+
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-core</artifactId>
+            <version>9.5.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-gson</artifactId>
+            <version>9.5.0</version>
+        </dependency>
+
+
+
         <!-- protostuff依赖包 end -->
     </dependencies>
 

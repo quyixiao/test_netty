@@ -20,6 +20,12 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Data
 @Service("CommandController")
+// CommandController 类：属于ClientCommand 模块，它负责收集用户在控制台输入到命令类型，根据相应的类型调用相应的命令处理器和收集相应的信息
+// 例如，如果用户输入命令类型为登陆，则调用LoginConsoleCommand 命令处理器， 将收集到用户Id 和密码封装成User类，然后启动登陆处理.
+// LoginMsgBuilder 类： 属于ProtobufBuilder模块，它负责将User类组装成Protobuf合建请求的数据包。
+// LoginSender类： 属于Sender 模块，它负责将组装好Protobuf合建数据包发送到服务器端 。
+// LoginResponseHandler类，属于Handler 模块，它负责处理服务器端的登录响应 。
+
 public class CommandController {
 
     //聊天命令收集类

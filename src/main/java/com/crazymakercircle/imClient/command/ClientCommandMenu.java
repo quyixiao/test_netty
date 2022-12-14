@@ -7,6 +7,8 @@ import java.util.Scanner;
 
 @Data
 @Service("ClientCommandMenu")
+// 控制台命令收集器
+//
 public class ClientCommandMenu implements BaseCommand {
 
     public static final String KEY = "0";
