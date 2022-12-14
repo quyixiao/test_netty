@@ -13,6 +13,8 @@
     <properties>
         <java.version>1.8</java.version>
         <maven.plugin.version>3.8.1</maven.plugin.version>
+        <springboot>1.5.9.RELEASE</springboot>
+        <guava.version>17.0</guava.version>
     </properties>
 
 
@@ -20,6 +22,31 @@
 
 
     <dependencies>
+
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <version>${springboot}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>${springboot}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <version>${springboot}</version>
+            <optional>true</optional>
+        </dependency>
+
+
+
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
@@ -73,6 +100,12 @@
         <!--=======================================================-->
 
 
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
 
         <!-- protostuff依赖包 end -->
     </dependencies>
