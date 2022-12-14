@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service("LoginRequestHandler")
 @ChannelHandler.Sharable
+// 属于Handler
 public class LoginRequestHandler extends ChannelInboundHandlerAdapter {
 
     @Autowired

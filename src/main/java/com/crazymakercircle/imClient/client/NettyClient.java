@@ -24,6 +24,10 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Data
 @Service("NettyClient")
+// 对于客户端的业务处理流水线，首先需要装配一个ProtobufDecoder解码器和一个ProtobufEncoder编码器，编码器和解码器一般都是装配在最前面
+// 然后需要装配业务处理器一LoginResponseHandler 登录响应处理器的实例。
+// 一般来说，在流水线最末端还需要装配一个ExceptionHandler 异常处理器，它也是一个入站处理器，用来实现Netty 异常的处理以及连接异常中断后
+// 进行重连接
 public class NettyClient {
     // 服务器ip地址
     private String host = "127.0.0.1";

@@ -18,6 +18,15 @@ import java.util.Map;
  */
 @Slf4j
 @Data
+// ClientSession是一个非常重要的脱水类， 有两个成员，一个是user代表用户，另一个是channel 代表了连接通道，在实际开发中， 这两个成员的作用是
+// 1 . 通过user， 可以获取当前用户的信息
+// 2. 通过channel,可以向服务器端发送消息
+// ClientSession 会话 左拥右抱， 左手拥有用户消息，右手拥有服务器端的连接，通过user 成员可以获取当前的用户信息，借助channel通道，ClientSession
+// 可以写入Protobuf数据包。 或者关闭Netty 连接
+// 其次， 客户端会话ClientSession 保存着当前的状态
+// 1. 是否成功连接isConnected
+// 2. 是否成功合建isLogin
+// 第三，ClientSession 绑定在通道上，因而可以在入站处理器中通过通道反射取得绑定的ClientSession
 public class ClientSession {
 
 
