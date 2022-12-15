@@ -16,8 +16,14 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @ChannelHandler.Sharable
 @Service("HeartBeatClientHandler")
+// 与服务器商的空间检测相配合，客户端要定期发送数据包到服务器端， 通常这个数据包称为心跳数据包，接下来，定义一个Handler业务处理器
+// 定期发送心跳数据包给服务器端
+// 在HeartBeatClientHandler 实例被加入到流水线时， 它重写了handlerAdded方法被回调，在headlerAdded(...) 方法中，开始调用heartBeat()方法
+// 发送
 public class HeartBeatClientHandler extends ChannelInboundHandlerAdapter {
     //心跳的时间间隔，单位为s
+    //  客户端的心跳间隔，要比服务器端的空闲检测时间要短， 一般来说，要比它的一半还要短一些，可以直接定义为空闲检测时间间隔 1/3 ，这样做的目的就是
+    // 为了防止公网偶发的秒级的抖动
     private static final int HEARTBEAT_INTERVAL = 100;
 
     //在Handler被加入到Pipeline时，开始发送心跳
@@ -75,5 +81,9 @@ public class HeartBeatClientHandler extends ChannelInboundHandlerAdapter {
         }
 
     }
+
+    // 在登录成功之后，在ChannelPipeline 通道流水线上， HeartBeatClientHandler 心跳客户端处理器实例被动态的插入到解码器之后。
+    // 服务器端的空闲检测处理器在收到客户端的心跳数据包后， 会进行回写， 在HeartBeatClientHandler 的channelRead方法中， 对加写的数据包
+    //
 
 }

@@ -13,6 +13,11 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Data
+// SessionMap 会话管理器
+// 一台服务器需要接受几万到几十万的客户端连接，第一条连接都对应到，一个ServerSession实例， 服务器需要对这些大量的ServerSession 实例进行管理
+// SessionMap 负责管理服务器端的所有 ServerSession ， 它有一个线程安全的ConcurrentHashMap 类型成员，保持sessionId 到服务器端ServerSession
+// 映射 。
+//
 public final class SessionMap {
     private SessionMap() {
     }

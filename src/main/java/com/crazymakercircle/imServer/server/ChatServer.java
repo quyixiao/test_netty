@@ -26,6 +26,10 @@ import java.net.InetSocketAddress;
 @Data
 @Slf4j
 @Service("ChatServer")
+// 服务器端的登录响应流程是：
+// 1. ProtobufDecoder 解码器把请求的ByteBuf 数据包解码成Protobuf数据包
+// 与客户端一样，对于服务器端流水线的，首先需要装配一个ProtobufDecoder 解码器和一个ProtobufEncoder 解码器， 然后需要装配loginRequestHandler
+// 登录业务处理器的实例，在流水线的最末端， 还需要装配一个serverExceptionHandler 异常处理器实例。
 public class ChatServer {
     // 服务器端口
     private int port = 8080;
