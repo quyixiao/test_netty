@@ -1,5 +1,7 @@
 package com.tuling;
 
+import java.util.concurrent.*;
+
 public class Test {
 
     private String userName;
@@ -7,7 +9,18 @@ public class Test {
 
 
     public static void main(String[] args) {
-        System.out.println("测试 ");
+
+
+        ThreadPoolExecutor executor =  new ThreadPoolExecutor(0, Integer.MAX_VALUE,
+                60L, TimeUnit.SECONDS,
+                new SynchronousQueue<Runnable>());
+
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("111111");
+            }
+        });
     }
 
     public Test() {
