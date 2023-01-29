@@ -8,6 +8,9 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.util.concurrent.DefaultPromise;
+
+import java.util.concurrent.Future;
 
 public class NettyServer {
 
@@ -53,9 +56,16 @@ public class NettyServer {
             // 等待服务端监听端口关闭，closeFuture是异步操作
             // 通过sync方法同步等待通道关闭处理完毕，这里会阻塞等待通道关闭完成，内部调用的是Object的wait()方法
             cf.channel().closeFuture().sync();
+            Thread.sleep(1000);
         } finally {
-            bossGroup.shutdownGracefully();
-            workerGroup.shutdownGracefully();
+            Future bossGroupFuture = bossGroup.shutdownGracefully();
+            if(bossGroupFuture instanceof DefaultPromise){
+                System.out.println(" boss 停止成功没有 " + ((DefaultPromise<?>) bossGroupFuture).isSuccess());
+            }
+            Future workerGroupFuture = workerGroup.shutdownGracefully();
+            if(workerGroupFuture instanceof DefaultPromise){
+                System.out.println(" worker 停止成功没有 " + ((DefaultPromise<?>) workerGroupFuture).isSuccess());
+            }
         }
     }
 }

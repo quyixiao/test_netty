@@ -1,12 +1,11 @@
 package com.fujian.e1;
+/*
 
 import com.my.e1.ServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
-import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.oio.OioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.oio.OioServerSocketChannel;
@@ -46,20 +45,22 @@ public class Test1 {
                             // 第四个参数是长度值的调节，假设请求包的大小是20B
                             // 若长度值不包含本身则应该是20 B  ，若长度值包含本身则应该是24B， 需要调整4个字节
                             // 第五个参数是在解析时需要跳过的字节数 （此处为4 ）
-                            ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0 ,4 ,0 ,4 ));
+                            ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4, 0, 4));
                             // 把接收到的ByteBuf 数据包转换成String
                             ch.pipeline().addLast(new StringDecoder());
 
-                            /**
+                            */
+/**
                              * 向Worker 线程管理双向链接中添加处理类ServerHandler
                              * 整个处理流向如下 ： HeadContext-channelRead读数据-->ServerHandler-channelRead
                              * 读取数据进行业务逻辑判断， 最后将结果返回给客户端 -->TailContextWrite
                              * -> HeadContext-write
-                             */
+                             *//*
+
                             ch.pipeline().addLast(new ServerHandler());
                             // 在消息体前面新增加4 个字节的长度值 ， 第一个参数的长度值占用字节数
                             // 第二个参数的长度值的调节，表明是否包含长度值本身
-                            ch.pipeline().addLast(new LengthFieldPrepender(4,false));
+                            ch.pipeline().addLast(new LengthFieldPrepender(4, false));
                             // 把字符串消息转换成ByteBuf
                             // 注意解码器和编码器的顺序
                             // 两者的执行顺序正好相反 ，解码器执行顺序从上往下，编译器执行顺序从下往上
@@ -72,7 +73,7 @@ public class Test1 {
             future.channel().closeFuture();
         } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             eventLoopGroup.shutdownGracefully();
 
         }
@@ -80,3 +81,4 @@ public class Test1 {
 
     }
 }
+*/
