@@ -47,14 +47,12 @@ public class TestPromise {
         });
 
         System.out.println(new Date() + "--------主线程的打印");
-        System.out.println(new Date() + "--------主线程阻塞");
 
 
         new Thread(new Runnable() {
             @Override
             public void run() {
                 System.out.println(new Date() + "--------多线程的打印");
-                System.out.println(new Date() + "--------多线程阻塞");
                 try {
                     promise.sync();
                 } catch (InterruptedException e) {

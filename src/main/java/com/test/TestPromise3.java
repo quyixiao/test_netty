@@ -26,6 +26,12 @@ public class TestPromise3 {
                public void operationComplete(Future<? super String> future) throws Exception {
                    Object s = future.get();
                    System.out.println(new Date() + "listner1---promise的future返回值：" + s);
+
+
+
+
+
+
                }
            });
            promise.setSuccess( Thread.currentThread().getName() + " promise set ");//设置返回结果 并且通知所有Listeners执行回调方法operationComplete方法
