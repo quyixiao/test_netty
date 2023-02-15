@@ -22,6 +22,11 @@ public class NettyServerHandler extends ChannelInboundHandlerAdapter {
         System.out.println("客户端连接通道建立完成");
     }
 
+    @Override
+    public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
+        super.channelRegistered(ctx);
+    }
+
     /**
      * 读取客户端发送的数据
      *

@@ -16,7 +16,7 @@ public class NioSelectorServer {
 
         // 创建NIO ServerSocketChannel
         ServerSocketChannel serverSocket = ServerSocketChannel.open();
-        serverSocket.socket().bind(new InetSocketAddress(9000));
+        serverSocket.socket().bind(new InetSocketAddress(9000),1024);
         // 设置ServerSocketChannel为非阻塞
         serverSocket.configureBlocking(false);
         // 打开Selector处理Channel，即创建epoll

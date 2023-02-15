@@ -12,7 +12,7 @@ public class NettyServer {
 
         // 创建两个线程组bossGroup和workerGroup, 含有的子线程NioEventLoop的个数默认为cpu核数的两倍
         // bossGroup只是处理连接请求 ,真正的和客户端业务处理，会交给workerGroup完成
-        EventLoopGroup bossGroup = new NioEventLoopGroup(2);
+        EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup(8);
         try {
             // 创建服务器端的启动对象
@@ -26,17 +26,19 @@ public class NettyServer {
                     // SO_BACKLOG: 此为TCP参数，表示服务器端接收连接的队列长度，如果队列已满，客户端连接将被拒绝默认值，在Windows中为200，其他操作系统为128 。
                     .option(ChannelOption.SO_BACKLOG, 1024)
                     .childHandler(new ChannelInitializer<SocketChannel>() {//创建通道初始化对象，设置初始化参数，在 SocketChannel 建立起来之前执行
-
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
                             //对workerGroup的SocketChannel设置处理器
                             ch.pipeline().addLast(new NettyServerHandler());
                         }
-                    });
+                    }
+
+                    );
             System.out.println("netty server start。。");
             // 绑定一个端口并且同步, 生成了一个ChannelFuture异步对象，通过isDone()等方法可以判断异步事件的执行情况
             // 启动服务器(并绑定端口)，bind是异步操作，sync方法是等待异步操作执行完毕
             ChannelFuture cf = bootstrap.bind(9000).sync();
+            System.out.println("netty server sync after ");
             // 给cf注册监听器，监听我们关心的事件
             cf.addListener(new ChannelFutureListener() {
                 @Override
